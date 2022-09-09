@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.kidoneself.aio.common.feign.config.FeignInterceptorConfiguration
+
+

@@ -1,0 +1,8 @@
+# Project exclude paths
+/aio-core/target/
+/aio-starter-datasource/target/
+/aio-starter-feign/target/
+/aio-starter-idempotent/target/
+/aio-starter-knife4j/target/
+/aio-starter-log/target/
+/aio-starter-mybatis/target/

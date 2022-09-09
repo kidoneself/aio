@@ -1,0 +1,10 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.kidoneself.aio.common.core.config.JacksonConfiguration,\
+  com.kidoneself.aio.common.core.config.WebMvcConfiguration,\
+  com.kidoneself.aio.common.core.config.GlobalExceptionHandler,\
+  com.kidoneself.aio.common.core.util.SpringContextHolder,\
+  com.kidoneself.aio.common.core.filter.TraceFilter, \
+  com.kidoneself.aio.common.core.properties.PigeonTraceProperties, \
+  com.kidoneself.aio.common.core.filter.ContextFilter,\
+  com.kidoneself.aio.common.core.config.DozerAutoConfiguration
+

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="aio-starter-feign" />
+        <module name="aio-starter-idempotent" />
+        <module name="aio-starter-mybatis" />
+        <module name="aio-starter-log" />
+        <module name="aio-core" />
+        <module name="aio-starter-knife4j" />
+        <module name="aio-starter-datasource" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>

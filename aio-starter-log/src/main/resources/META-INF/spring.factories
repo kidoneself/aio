@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.kidoneself.aio.log.config.LogConfiguration
+org.springframework.context.ApplicationContextInitializer=\
+  com.kidoneself.aio.log.config.TransmitLocalMdcInitializer

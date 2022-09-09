@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <springProperty scope="context" name="log.path" source="pigeon.log.path" defaultValue="logs"/>
+    <springProperty scope="context" name="log.level" source="pigeon.log.level" defaultValue="DEBUG"/>
+    <springProperty scope="context" name="spring.application.name" source="spring.application.name"/>
+
+    <!-- ali日志相关 start -->
+    <springProperty scope="context" name="log.ali.endpoint" source="pigeon.log.ali.endpoint" defaultValue="cn-beijing.log.aliyuncs.com"/>
+    <springProperty scope="context" name="log.ali.accessKeyId" source="pigeon.log.ali.accessKeyId" defaultValue=""/>
+    <springProperty scope="context" name="log.ali.accessKeySecret" source="pigeon.log.ali.accessKeySecret" defaultValue=""/>
+    <springProperty scope="context" name="log.ali.project" source="pigeon.log.ali.project" defaultValue=""/>
+    <springProperty scope="context" name="log.ali.logStore" source="pigeon.log.ali.logStore" defaultValue=""/>
+    <springProperty scope="context" name="log.ali.mdcFields" source="pigeon.log.ali.mdcFields" defaultValue=""/>
+    <!-- ali日志相关 end -->
+
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+
+    <property name="log_pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t:%r] [%X{trace-id}] [%logger{500}.%M:%L] %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <property name="log_pattern_console" value="%red(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr([%5p]) %clr([%t:%r]){orange} %clr([%X{trace-id}]){yellow} %clr([%logger{200}.%M:%L]){cyan} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+
+    <!-- 控制台日志 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${log.level}</level>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>${log_pattern_console}</Pattern>
+        </encoder>
+    </appender>
+    <!-- 控制台 异步 -->
+    <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
+        <discardingThreshold>0</discardingThreshold>
+        <!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
+        <queueSize>256</queueSize>
+        <!-- 添加附加的appender,最多只能添加一个 -->
+        <appender-ref ref="CONSOLE"/>
+    </appender>
+
+    <!-- 所有日志 -->
+    <appender name="ALL_LOG_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${log.level}</level>
+        </filter>
+        <file>${log.path}/${spring.application.name}/all.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/${spring.application.name}/%d{yyyy-MM}/root-%d{yyyy-MM-dd}-%i.log.gz
+            </fileNamePattern>
+            <maxFileSize>128MB</maxFileSize>
+            <maxHistory>60</maxHistory>
+            <totalSizeCap>20GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${log_pattern}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <!-- 所有日志 异步  -->
+    <appender name="ASYNC_ALL_LOG_APPENDER" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>256</queueSize>
+        <appender-ref ref="ALL_LOG_APPENDER"/>
+    </appender>
+
+    <!-- 阿里云日志 -->
+    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+    <appender name="ALIYUN" class="com.aliyun.openservices.log.logback.LoghubAppender">
+        <!--必选项  start -->
+        <endpoint>${log.ali.endpoint}</endpoint>
+        <accessKeyId>${log.ali.accessKeyId}</accessKeyId>
+        <accessKeySecret>${log.ali.accessKeySecret}</accessKeySecret>
+        <project>${log.ali.project}</project>
+        <logStore>${log.ali.logStore}</logStore>
+        <!--必选项 end -->
+
+        <!-- topic 用以区分不同的服务 -->
+        <topic>${spring.application.name}</topic>
+        <totalSizeInBytes>104857600</totalSizeInBytes>
+        <maxBlockMs>0</maxBlockMs>
+        <ioThreadCount>8</ioThreadCount>
+        <batchSizeThresholdInBytes>524288</batchSizeThresholdInBytes>
+        <batchCountThreshold>4096</batchCountThreshold>
+        <lingerMs>2000</lingerMs>
+        <retries>10</retries>
+        <baseRetryBackoffMs>100</baseRetryBackoffMs>
+        <maxRetryBackoffMs>50000</maxRetryBackoffMs>
+        <encoder>
+            <pattern>${log_pattern}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!-- 可选项 设置 time 字段呈现的格式 -->
+        <timeFormat>yyyy-MM-dd HH:mm:ss.SSS</timeFormat>
+        <!-- 可选项 设置 time 字段呈现的时区 -->
+        <timeZone>UTC</timeZone>
+        <mdcFields>${log.ali.mdcFields}</mdcFields>
+    </appender>
+
+</included>

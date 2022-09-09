@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.kidoneself.aio.common.ide.aspect.IdeAspect
